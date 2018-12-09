@@ -1,7 +1,10 @@
 package ba.unsa.etf.rpr.tutorijal08;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,12 +17,16 @@ import javafx.scene.control.TextField;
 import java.io.File;
 
 public class Controller {
+
     private   ObservableList<String> listaFile = FXCollections.observableArrayList();
     private ObjectProperty<String> trenutniFile = new SimpleObjectProperty<>();
+    boolean dugmeProvjeri=true;
+    public Thread thread;
     public ListView<String> list;
-
     public TextField Uzorak;
     public Button dugme;
+    public Button dugmePrekini;
+    public String samoZaPretragu="";
     private  void getFilesRecursive(File pFile)
     {
         if(pFile==null)return;
@@ -36,7 +43,7 @@ public class Controller {
             }
             else
             {
-                if(files.getName().equalsIgnoreCase(Uzorak.getText())) {
+                if(files.getName().equalsIgnoreCase(samoZaPretragu)) {
                     list.getItems().add(list.getItems().size(), files.getAbsolutePath());
                 }
             }
@@ -49,19 +56,54 @@ public class Controller {
 
     }
 
-    public Controller() {
-    }
+    public Controller() {}
     public void dugmeKliknuto(ActionEvent actionEvent) {
-        prodjiKrozListu();
+       // if(thread!=null || thread.isDaemon())thread.stop();
+        Runnable runnable = () -> {
+            try{
+
+                Thread.sleep(1000);
+                samoZaPretragu=Uzorak.getText();
+                prodjiKrozListu();
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        };
+        thread =new Thread(runnable);
+        thread.start();
+
+    }
+    public void dugmePrekinuto(ActionEvent actionEvent) {
+        //if(thread!=null || thread.isInterrupted())thread.stop();
+        Runnable runnable = () -> {
+            try {
+                Thread.sleep(1000);
+                samoZaPretragu = "";
+                for (String s : list.getItems()) s = "";
+            } catch (Exception e) {
+            }
+        };
+        thread =new Thread(runnable);
+        thread.start();
+       // listaFile.remove(0, listaFile.size());
     }
 
     @FXML
     public void initialize() {
+
         this.list.setItems(this.listaFile);
+        Uzorak.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String o, String n) {
+
+
+            }
+        });
+
 
 
     }
-
 
     public ObservableList<String> getListaFile() {
         return listaFile;
@@ -77,6 +119,6 @@ public class Controller {
     }
 
     public void setUzorak(TextField uzorak) {
-        Uzorak = uzorak;
+        Uzorak= uzorak;
     }
 }
