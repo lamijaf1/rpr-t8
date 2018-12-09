@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
@@ -15,14 +16,19 @@ import java.io.File;
 public class Controller {
     private   ObservableList<String> listaFile = FXCollections.observableArrayList();
     private ObjectProperty<String> trenutniFile = new SimpleObjectProperty<>();
-    ListView<String> list = new ListView<String>(listaFile);
-    TextField Uzorak;
+    public ListView<String> list;
 
+    public TextField Uzorak;
+    public Button dugme;
     private  void getFilesRecursive(File pFile)
     {
-        if(pFile.isDirectory())return;
         if(pFile==null)return;
-        for(File files : pFile.listFiles())
+        if(!pFile.isDirectory())return;
+        File[] niz = pFile.listFiles();
+        if ( niz == null ) {
+            return;
+        }
+        for(File files : niz)
         {
             if(files.isDirectory())
             {
@@ -30,7 +36,9 @@ public class Controller {
             }
             else
             {
-                if(pFile.getName().equalsIgnoreCase(Uzorak.getText())) list.getItems().add(list.getItems().size(), pFile.getAbsolutePath());
+                if(files.getName().equalsIgnoreCase(Uzorak.getText())) {
+                    list.getItems().add(list.getItems().size(), files.getAbsolutePath());
+                }
             }
         }
     }
@@ -42,7 +50,6 @@ public class Controller {
     }
 
     public Controller() {
-        prodjiKrozListu();
     }
     public void dugmeKliknuto(ActionEvent actionEvent) {
         prodjiKrozListu();
@@ -50,7 +57,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        prodjiKrozListu();
+        this.list.setItems(this.listaFile);
 
 
     }
