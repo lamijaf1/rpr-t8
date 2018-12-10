@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr.tutorijal08;
 
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -8,21 +9,27 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
-import static java.awt.Color.black;
-import static java.awt.Color.darkGray;
-
-public class Controller {
+public class Controller  {
 
     private   ObservableList<String> listaFile = FXCollections.observableArrayList();
     private ObjectProperty<String> trenutniFile = new SimpleObjectProperty<>();
+    NewWindowController noviController;
     boolean dugmeProvjeri=true;
     public Thread thread;
     public ListView<String> list;
@@ -60,8 +67,23 @@ public class Controller {
     }
 
     public Controller() {
+
     }
-    public void ListaKliknuta(ActionEvent actionEvent) {}
+
+    public void ListaKliknuta(MouseEvent actionEvent) {
+            Parent root = null;
+            try {
+                Stage myStage = new Stage();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("novifxml.fxml"));
+                loader.load();
+                noviController = loader.getController();
+                myStage.setTitle("Novi prozor");
+                myStage.setScene(new Scene(loader.getRoot(), 300, 275));
+                myStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     public void dugmeKliknuto(ActionEvent actionEvent) {
        // if(thread!=null || thread.isDaemon())thread.stop();
         dugme.getStyleClass().removeAll("poljeTrazi, poljePrekini");
