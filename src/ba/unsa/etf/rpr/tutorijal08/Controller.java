@@ -88,32 +88,31 @@ public class Controller  {
             }
         }
     public void dugmeKliknuto(ActionEvent actionEvent) {
-       // if(thread!=null || thread.isDaemon())thread.stop();
-        dugme.getStyleClass().removeAll("poljeTrazi, poljePrekini");
         Runnable runnable = () -> {
             try{
-                Thread.sleep(1000);
+                //Thread.sleep(1000);
+                dugme.setDisable(true);
                 samoZaPretragu=Uzorak.getText();
                 prodjiKrozListu();
-                dugme.getStyleClass().add("poljeTrazi");
-
-            } catch (Exception e) {
+            } finally { dugme.setDisable(false);}
+          /*  } catch (Exception e) {
                 System.out.println(e.getMessage());
-            }
+            }*/
         };
         thread =new Thread(runnable);
         thread.start();
 
+
+
+
     }
     public void dugmePrekinuto(ActionEvent actionEvent) {
-        //if(thread!=null || thread.isInterrupted())thread.stop();
+
         Runnable runnable = () -> {
             try {
                 Thread.sleep(1000);
                 samoZaPretragu = "";
-                dugmePrekini.getStyleClass().removeAll("poljePrekini");
-                dugmePrekini.getStyleClass().add("poljeTrazi");
-                for (String s : list.getItems()) s = "";
+
             } catch (Exception e) {
             }
         };
@@ -124,15 +123,8 @@ public class Controller  {
 
     @FXML
     public void initialize() {
-        dugmePrekini.getStyleClass().add("addBobOk");
         this.list.setItems(this.listaFile);
-        Uzorak.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String o, String n) {
-
-
-            }
-        });
+        //dugme.setDefaultButton(true);
 
 
 

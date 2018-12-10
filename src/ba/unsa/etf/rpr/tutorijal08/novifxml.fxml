@@ -56,11 +56,11 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="postanskiBroj"  onAction="#posalji" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <TextField fx:id="postanskiBroj"  onAction="#posalji"  GridPane.columnIndex="1" GridPane.rowIndex="3">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button fx:id="posaljiBtn" mnemonicParsing="false"  prefHeight="61.0" prefWidth="162.0" text="Pošalji" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Button fx:id="posaljiBtn" onAction="#posalji1" mnemonicParsing="false"  prefHeight="61.0" prefWidth="162.0" text="Pošalji" GridPane.columnIndex="1" GridPane.rowIndex="5" />
    </children>
 </GridPane>
