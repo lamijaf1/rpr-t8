@@ -16,6 +16,9 @@ import javafx.scene.control.TextField;
 
 import java.io.File;
 
+import static java.awt.Color.black;
+import static java.awt.Color.darkGray;
+
 public class Controller {
 
     private   ObservableList<String> listaFile = FXCollections.observableArrayList();
@@ -56,15 +59,18 @@ public class Controller {
 
     }
 
-    public Controller() {}
+    public Controller() {
+    }
+    public void ListaKliknuta(ActionEvent actionEvent) {}
     public void dugmeKliknuto(ActionEvent actionEvent) {
        // if(thread!=null || thread.isDaemon())thread.stop();
+        dugme.getStyleClass().removeAll("poljeTrazi, poljePrekini");
         Runnable runnable = () -> {
             try{
-
                 Thread.sleep(1000);
                 samoZaPretragu=Uzorak.getText();
                 prodjiKrozListu();
+                dugme.getStyleClass().add("poljeTrazi");
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -80,6 +86,8 @@ public class Controller {
             try {
                 Thread.sleep(1000);
                 samoZaPretragu = "";
+                dugmePrekini.getStyleClass().removeAll("poljePrekini");
+                dugmePrekini.getStyleClass().add("poljeTrazi");
                 for (String s : list.getItems()) s = "";
             } catch (Exception e) {
             }
@@ -91,7 +99,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-
+        dugmePrekini.getStyleClass().add("addBobOk");
         this.list.setItems(this.listaFile);
         Uzorak.textProperty().addListener(new ChangeListener<String>() {
             @Override
