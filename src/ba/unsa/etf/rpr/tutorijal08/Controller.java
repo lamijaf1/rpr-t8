@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+
 public class Controller  {
 
     private   ObservableList<String> listaFile = FXCollections.observableArrayList();
@@ -71,6 +73,7 @@ public class Controller  {
     }
 
     public void ListaKliknuta(MouseEvent actionEvent) {
+            if(list.getItems().size()==0)return;
             Parent root = null;
             try {
                 Stage myStage = new Stage();
@@ -78,7 +81,7 @@ public class Controller  {
                 loader.load();
                 noviController = loader.getController();
                 myStage.setTitle("Novi prozor");
-                myStage.setScene(new Scene(loader.getRoot(), 300, 275));
+                myStage.setScene(new Scene(loader.getRoot(),  USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
                 myStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
