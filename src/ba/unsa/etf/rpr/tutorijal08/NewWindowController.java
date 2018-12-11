@@ -46,48 +46,27 @@ public class NewWindowController {
         return true;
     }
 
-    public NewWindowController() {
-    }
+    public NewWindowController() {}
 
     @FXML
     public void initialize() {
         postanskiBroj.focusedProperty().addListener((obs, a, b) -> {
             Runnable runnable = ()  ->{
                     if (!b) {
-                        postBr = postanskiBroj.getText();
-                        if(validPostBr())System.out.println("OK");
-                        if(!validPostBr())System.out.println("NOT OK");
+                        try {
+                            Thread.sleep(1000);
+                            postBr = postanskiBroj.getText();
+                            if (validPostBr()) System.out.println("OK");
+                            if (!validPostBr()) System.out.println("NOT OK");
+                        } catch (Exception ex){}
                     }
-
-        };
+            };
             posaljiNit = new Thread(runnable);
-            posaljiNit.setDaemon(true);
+            //posaljiNit.setDaemon(true);
             posaljiNit.start();
-
-
         });
     }
-    public void posalji(ActionEvent actionEvent){
-           /* Runnable runnable = () -> {
-                try {
-                        Thread.sleep(1000);
-                        if(naFokusu)System.out.println("OK");
-                        else System.out.println("NOT OK");
-                } catch (Exception e) {
-                    System.out.println("");
-                }
-            };
-
-            posaljiNit = new Thread(runnable);
-            posaljiNit.setDaemon(true);
-            posaljiNit.start();
-            */
-
-
-            }
-
-
-    public void posalji1(ActionEvent actionEvent) {
-    }
+    public void posalji(ActionEvent actionEvent){}
+    public void posalji1(ActionEvent actionEvent) {}
 }
 
