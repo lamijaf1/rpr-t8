@@ -20,7 +20,6 @@ public class NewWindowController {
     public String postBr2 = "";
 
     public boolean validPostBr() {
-        postBr = postanskiBroj.getText();
         if (!postBr.contains("postanskiBroj=")) return false;
         String wordToFind = "postanskiBroj=";
         Pattern word = Pattern.compile(wordToFind);
@@ -35,7 +34,7 @@ public class NewWindowController {
             spasiPoz++;
         }
         if (postBr2.length() < 5) return false;
-        if(nova+5==postBr.length()-1)return false;
+        if(nova+5>postBr.length())return false;
         postBr1 = postBr.substring(nova, nova + 5);
         //System.out.println(postBr1);
         if (!postBr2.equals(postBr1) || postBr1.length() < 5) return false;
@@ -53,17 +52,23 @@ public class NewWindowController {
     @FXML
     public void initialize() {
         postanskiBroj.focusedProperty().addListener((obs, a, b) -> {
-            if (!b) {
-                if(validPostBr())System.out.println("OK");
-                if(!validPostBr())System.out.println("NOT OK");
-            }
+            Runnable runnable = ()  ->{
+                    if (!b) {
+                        postBr = postanskiBroj.getText();
+                        if(validPostBr())System.out.println("OK");
+                        if(!validPostBr())System.out.println("NOT OK");
+                    }
+
+        };
+            posaljiNit = new Thread(runnable);
+            posaljiNit.setDaemon(true);
+            posaljiNit.start();
+
+
         });
-
-
     }
-
-    public void posalji(ActionEvent actionEvent) {
-        Runnable runnable = ()  ->{
+    public void posalji(ActionEvent actionEvent){
+           /* Runnable runnable = () -> {
                 try {
                         Thread.sleep(1000);
                         if(naFokusu)System.out.println("OK");
@@ -76,9 +81,11 @@ public class NewWindowController {
             posaljiNit = new Thread(runnable);
             posaljiNit.setDaemon(true);
             posaljiNit.start();
+            */
 
 
-    }
+            }
+
 
     public void posalji1(ActionEvent actionEvent) {
     }

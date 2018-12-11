@@ -68,9 +68,7 @@ public class Controller  {
 
     }
 
-    public Controller() {
-
-    }
+    public Controller() {}
 
     public void ListaKliknuta(MouseEvent actionEvent) {
             if(list.getItems().size()==0)return;
@@ -92,9 +90,13 @@ public class Controller  {
             try{
                 //Thread.sleep(1000);
                 dugme.setDisable(true);
+                dugmePrekini.setDisable(false);
                 samoZaPretragu=Uzorak.getText();
                 prodjiKrozListu();
-            } finally { dugme.setDisable(false);}
+            } finally {
+                dugme.setDisable(false);
+                dugmePrekini.setDisable(true);
+            }
           /*  } catch (Exception e) {
                 System.out.println(e.getMessage());
             }*/
@@ -111,9 +113,11 @@ public class Controller  {
         Runnable runnable = () -> {
             try {
                 Thread.sleep(1000);
+                //dugmePrekini.setDisable(false);
                 samoZaPretragu = "";
 
-            } catch (Exception e) {
+            }catch (Exception e){
+
             }
         };
         thread =new Thread(runnable);
@@ -124,9 +128,6 @@ public class Controller  {
     @FXML
     public void initialize() {
         this.list.setItems(this.listaFile);
-        //dugme.setDefaultButton(true);
-
-
 
     }
 
