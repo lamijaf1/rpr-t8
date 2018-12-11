@@ -32,15 +32,13 @@ public class Controller  {
     private   ObservableList<String> listaFile = FXCollections.observableArrayList();
     private ObjectProperty<String> trenutniFile = new SimpleObjectProperty<>();
     NewWindowController noviController;
-    boolean dugmeProvjeri=true;
     public Thread thread;
     public ListView<String> list;
     public TextField Uzorak;
     public Button dugme;
     public Button dugmePrekini;
     public String samoZaPretragu="";
-    private  void getFilesRecursive(File pFile)
-    {
+    private  void getFilesRecursive(File pFile) {
         if(pFile==null)return;
         if(!pFile.isDirectory())return;
         File[] niz = pFile.listFiles();
@@ -97,28 +95,16 @@ public class Controller  {
                 dugme.setDisable(false);
                 dugmePrekini.setDisable(true);
             }
-          /*  } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }*/
         };
         thread =new Thread(runnable);
         thread.start();
-
-
-
-
     }
     public void dugmePrekinuto(ActionEvent actionEvent) {
-
         Runnable runnable = () -> {
             try {
                 Thread.sleep(1000);
-                //dugmePrekini.setDisable(false);
                 samoZaPretragu = "";
-
-            }catch (Exception e){
-
-            }
+            }catch (Exception e){ }
         };
         thread =new Thread(runnable);
         thread.start();
@@ -128,7 +114,6 @@ public class Controller  {
     @FXML
     public void initialize() {
         this.list.setItems(this.listaFile);
-
     }
 
     public ObservableList<String> getListaFile() {
