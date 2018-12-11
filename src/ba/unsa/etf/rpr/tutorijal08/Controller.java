@@ -37,7 +37,10 @@ public class Controller  {
     public TextField Uzorak;
     public Button dugme;
     public Button dugmePrekini;
+    boolean prviPut=true;
     public String samoZaPretragu="";
+    private boolean trebaPrekinuti=false;
+
     private  void getFilesRecursive(File pFile) {
         if(pFile==null)return;
         if(!pFile.isDirectory())return;
@@ -47,13 +50,14 @@ public class Controller  {
         }
         for(File files : niz)
         {
-            if(files.isDirectory())
+            if(trebaPrekinuti)return;
+           else if(files.isDirectory())
             {
                 getFilesRecursive(files);
             }
             else
             {
-                if(files.getName().equalsIgnoreCase(samoZaPretragu)) {
+                if(files.getName().contains(samoZaPretragu)) {
                     list.getItems().add(list.getItems().size(), files.getAbsolutePath());
                 }
             }
@@ -86,11 +90,15 @@ public class Controller  {
     public void dugmeKliknuto(ActionEvent actionEvent) {
         Runnable runnable = () -> {
             try{
-                //Thread.sleep(1000);
+                trebaPrekinuti=false;
+                if(prviPut)prviPut=false;
+                if(!prviPut)listaFile.remove(0, listaFile.size());
                 dugme.setDisable(true);
                 dugmePrekini.setDisable(false);
                 samoZaPretragu=Uzorak.getText();
                 prodjiKrozListu();
+
+
             } finally {
                 dugme.setDisable(false);
                 dugmePrekini.setDisable(true);
@@ -100,15 +108,10 @@ public class Controller  {
         thread.start();
     }
     public void dugmePrekinuto(ActionEvent actionEvent) {
-        Runnable runnable = () -> {
-            try {
-                Thread.sleep(1000);
+                trebaPrekinuti=true;
                 samoZaPretragu = "";
-            }catch (Exception e){ }
-        };
-        thread =new Thread(runnable);
-        thread.start();
-       // listaFile.remove(0, listaFile.size());
+
+
     }
 
     @FXML

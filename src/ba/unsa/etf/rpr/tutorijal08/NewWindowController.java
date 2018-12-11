@@ -5,6 +5,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,9 +23,19 @@ public class NewWindowController {
     public String postBr = "";
     public String postBr1 = "";
     public String postBr2 = "";
+    //URL url = new URL("http://c9.etf.unsa.ba/proba/postanskiBroj.php?postanskiBroj=");
 
-    public boolean validPostBr() {
-        if (!postBr.contains("postanskiBroj=")) return false;
+    public boolean validPostBr() throws  Exception {
+        URL url = new URL("http://c9.etf.unsa.ba/proba/postanskiBroj.php?postanskiBroj="+postanskiBroj.getText());
+        BufferedReader ulaz = new BufferedReader(new InputStreamReader(url.openStream(),
+                StandardCharsets.UTF_8));
+        String json = "", line = null;
+        while ((line = ulaz.readLine()) != null)
+            json = json + line;
+        if(json.equals("OK")) return true;
+        else return false;
+
+       /* if (!postBr.contains("postanskiBroj=")) return false;
         String wordToFind = "postanskiBroj=";
         Pattern word = Pattern.compile(wordToFind);
         Matcher match = word.matcher(postBr);
@@ -37,13 +52,13 @@ public class NewWindowController {
         if(nova+5>postBr.length())return false;
         postBr1 = postBr.substring(nova, nova + 5);
         //System.out.println(postBr1);
-        if (!postBr2.equals(postBr1) || postBr1.length() < 5) return false;
-        if (!(postBr1.charAt(0) == '7' || postBr1.charAt(0) == '8')) return false;
+        if (!postBr2.equals(postBr1) || postBr1.length() < 5) return false;*/
+        /*if (!(postBr1.charAt(0) == '7' || postBr1.charAt(0) == '8')) return false;
         for (int i = 1; i <= 4; i++) {
             if (!(postBr1.charAt(i) >= '0' && postBr1.charAt(i) <= '9')) return false;
         }
         postBr2="";
-        return true;
+        return true;*/
     }
 
     public NewWindowController() {}
