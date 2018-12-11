@@ -35,6 +35,7 @@ public class NewWindowController {
             spasiPoz++;
         }
         if (postBr2.length() < 5) return false;
+        if(nova+5==postBr.length()-1)return false;
         postBr1 = postBr.substring(nova, nova + 5);
         //System.out.println(postBr1);
         if (!postBr2.equals(postBr1) || postBr1.length() < 5) return false;
@@ -42,6 +43,7 @@ public class NewWindowController {
         for (int i = 1; i <= 4; i++) {
             if (!(postBr1.charAt(i) >= '0' && postBr1.charAt(i) <= '9')) return false;
         }
+        postBr2="";
         return true;
     }
 
@@ -52,9 +54,8 @@ public class NewWindowController {
     public void initialize() {
         postanskiBroj.focusedProperty().addListener((obs, a, b) -> {
             if (!b) {
-                naFokusu = validPostBr();
-                if(naFokusu)System.out.println("OK");
-                else System.out.println("NOT OK");
+                if(validPostBr())System.out.println("OK");
+                if(!validPostBr())System.out.println("NOT OK");
             }
         });
 
