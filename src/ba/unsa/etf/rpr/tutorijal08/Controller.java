@@ -13,6 +13,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -30,7 +31,6 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class Controller  {
 
     private   ObservableList<String> listaFile = FXCollections.observableArrayList();
-    private ObjectProperty<String> trenutniFile = new SimpleObjectProperty<>();
     NewWindowController noviController;
     public Thread thread;
     public ListView<String> list;
@@ -41,7 +41,7 @@ public class Controller  {
     public String samoZaPretragu="";
     private boolean trebaPrekinuti=false;
 
-    private  void getFilesRecursive(File pFile) {
+    private  void getFilesRecursive(File pFile){
         if(pFile==null)return;
         if(!pFile.isDirectory())return;
         File[] niz = pFile.listFiles();
@@ -58,7 +58,12 @@ public class Controller  {
             else
             {
                 if(files.getName().contains(samoZaPretragu)) {
-                    list.getItems().add(list.getItems().size(), files.getAbsolutePath());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            list.getItems().add(list.getItems().size(), files.getAbsolutePath());
+                        }
+                    });
                 }
             }
         }
@@ -67,7 +72,6 @@ public class Controller  {
         String putanja = System.getProperty("user.home");
         File f = new File(putanja);
         getFilesRecursive(f);
-
     }
 
     public Controller() {}
@@ -88,51 +92,40 @@ public class Controller  {
             }
         }
     public void dugmeKliknuto(ActionEvent actionEvent) {
-        Runnable runnable = () -> {
-            try{
-                trebaPrekinuti=false;
-                if(prviPut)prviPut=false;
-                if(!prviPut)listaFile.remove(0, listaFile.size());
+
+        Runnable runnable = (() -> {
+            try {
+                Thread.sleep(1000);
+                Scene novaScena = dugme.getScene();
+                novaScena.setCursor(Cursor.WAIT);
+                trebaPrekinuti = false;
+                if (prviPut) prviPut = false;
                 dugme.setDisable(true);
                 dugmePrekini.setDisable(false);
-                samoZaPretragu=Uzorak.getText();
+                samoZaPretragu = Uzorak.getText();
                 prodjiKrozListu();
-
-
-            } finally {
+            }catch(Exception ex){
+                System.out.println(ex.getMessage());
+            }finally {
                 dugme.setDisable(false);
                 dugmePrekini.setDisable(true);
+                dugme.getScene().setCursor(Cursor.DEFAULT);
             }
-        };
+        });
         thread =new Thread(runnable);
+        thread.setDaemon(true);
         thread.start();
     }
     public void dugmePrekinuto(ActionEvent actionEvent) {
                 trebaPrekinuti=true;
                 samoZaPretragu = "";
-
-
+                if(thread.isAlive())thread.interrupt();
     }
 
     @FXML
     public void initialize() {
         this.list.setItems(this.listaFile);
-    }
-
-    public ObservableList<String> getListaFile() {
-        return listaFile;
-    }
-
-    public void setListaFile(ObservableList<String> listaFile) {
-        this.listaFile = listaFile;
-    }
-
-
-    public TextField getUzorak() {
-        return Uzorak;
-    }
-
-    public void setUzorak(TextField uzorak) {
-        Uzorak= uzorak;
+        dugmePrekini.setDisable(true);
+        dugme.setDisable(false);
     }
 }
